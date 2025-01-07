@@ -92,6 +92,20 @@ vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
+vim.opt.guifont = 'Fira Code:h14'
+
+
+if vim.g.neovide then
+  vim.g.neovide_theme = 'auto'
+
+  -- Set fullscreen toggle for F11
+  vim.api.nvim_set_keymap('n', '<F11>', ":lua ToggleFullscreen()<CR>", { noremap = true, silent = true })
+
+  -- Lua function to toggle fullscreen
+  function ToggleFullscreen()
+    vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
+  end
+end
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -307,7 +321,7 @@ require('lazy').setup({
           F8 = '<F8>',
           F9 = '<F9>',
           F10 = '<F10>',
-          F11 = '<F11>',
+          -- F11 = '<F11>',
           F12 = '<F12>',
         },
       },
@@ -839,13 +853,13 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
+    'catppuccin/nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     init = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'catppuccin'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'

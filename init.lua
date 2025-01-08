@@ -94,13 +94,17 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = false
 vim.opt.guifont = 'Fira Code:h14'
 
-
 if vim.g.neovide then
   vim.g.neovide_theme = 'auto'
 
   -- Set fullscreen toggle for F11
-  vim.api.nvim_set_keymap('n', '<F11>', ":lua ToggleFullscreen()<CR>", { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('n', '<F11>', ':lua ToggleFullscreen()<CR>', { noremap = true, silent = true })
 
+  -- g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
+  vim.g.neovide_transparency = 0.9
+  vim.g.transparency = 0.9
+
+  vim.g.neovide_window_blurred = true
   -- Lua function to toggle fullscreen
   function ToggleFullscreen()
     vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
@@ -866,6 +870,52 @@ require('lazy').setup({
     end,
   },
 
+  -- Status line setting
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup()
+    end,
+  },
+
+  -- Replaces the UI for messages, cmdline and the popupmenu.
+  {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      'rcarriga/nvim-notify',
+    },
+    config = function()
+      require('noice').setup {
+        lsp = {
+          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+          override = {
+            ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+            ['vim.lsp.util.stylize_markdown'] = true,
+            ['cmp.entry.get_documentation'] = true, -- requires hrsh7th/nvim-cmp
+          },
+        },
+        -- you can enable a preset for easier configuration
+        presets = {
+          bottom_search = true, -- use a classic bottom cmdline for search
+          command_palette = true, -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false, -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = false, -- add a border to hover docs and signature help
+        },
+      }
+    end,
+  },
+
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -945,7 +995,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`

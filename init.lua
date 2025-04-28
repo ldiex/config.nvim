@@ -84,7 +84,7 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
-vim.cmd 'source ~/.config/nvim/.vimrc'
+vim.cmd 'source $HOME/.vimrc'
 
 -- Set <space> as the leader key
 -- See `:help mapleader`

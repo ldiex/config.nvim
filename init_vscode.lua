@@ -84,7 +84,13 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
-vim.cmd 'source $HOME/.vimrc'
+
+
+if vim.uv.os_uname().sysname == "Windows_NT" then
+  vim.cmd 'source C:\\Users\\diex\\AppData\\Local\\nvim\\.vimrc'
+else
+  vim.cmd 'source $HOME/.config/nvim/.vimrc'
+end
 
 if vim.uv.os_uname().sysname == "Windows_NT" then
   vim.opt.shell = "cmd.exe"

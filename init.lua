@@ -84,7 +84,36 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
-vim.cmd 'source $HOME/.vimrc'
+if vim.uv.os_uname().sysname == "Windows_NT" then
+  vim.cmd 'source C:\\Users\\diex\\AppData\\Local\\nvim\\.vimrc'
+else
+  vim.cmd 'source $HOME/.config/nvim/.vimrc'
+end
+
+if vim.uv.os_uname().sysname == "Windows_NT" then
+  vim.opt.shell = "cmd.exe"
+  local augroup = vim.api.nvim_create_augroup('diex', { clear = true })
+  local create_autocmd = vim.api.nvim_create_autocmd
+  local imselect = 'C:\\Users\\diex\\Apps\\im-select.exe'
+
+  create_autocmd({ 'InsertLeave', 'FocusGained', 'CmdlineLeave', 'VimEnter' }, {
+    pattern = { '*' },
+    group = augroup,
+    callback = function(_)
+      -- 切换至美式键盘
+      vim.system { imselect, '1033' }
+    end,
+  })
+  create_autocmd({ 'FocusLost' }, {
+    pattern = { '*' },
+    group = augroup,
+    callback = function(_)
+      -- 切换至微软拼音
+      vim.system { imselect, '2052' }
+    end,
+  })
+end
+
 
 -- Set <space> as the leader key
 -- See `:help mapleader`

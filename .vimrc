@@ -2,10 +2,17 @@ set relativenumber
 set tabstop=4
 
 let mapleader = "\<Space>"
-nnoremap <leader>mm :call ToggleEquation()<CR>
+nnoremap <leader>mm :call MdToLatex()<CR>
 
-function! ToggleEquation()
+function! MdToLatex()
   let l:start_pos = getpos('.')
+  
+  %s/^# \(.*\)$/\\section{\1}/ge
+  %s/^## \(.*\)$/\\subsection{\1}/ge
+  %s/^### \(.*\)$/\\subsubsection{\1}/ge
+  
+  %s/\*\*\(.\{-}\)\*\*/\\textbf{\1}/ge
+  
   %s/\$\$\n\s*\\begin{aligned}\s*/\\begin{align}/ge
   %s/\s*\\end{aligned}\n\s*\$\$/\\end{align}/ge
   call setpos('.', l:start_pos)

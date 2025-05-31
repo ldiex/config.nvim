@@ -84,7 +84,31 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
-vim.cmd 'source ~/.config/nvim/.vimrc'
+vim.cmd 'source $HOME/.vimrc'
+
+if vim.uv.os_uname().sysname == "Windows_NT" then
+  vim.opt.shell = "cmd.exe"
+  local augroup = vim.api.nvim_create_augroup('diex', { clear = true })
+  local create_autocmd = vim.api.nvim_create_autocmd
+  local imselect = 'C:\\Users\\diex\\Apps\\im-select.exe'
+
+  create_autocmd({ 'InsertLeave', 'FocusGained', 'CmdlineLeave', 'VimEnter' }, {
+    pattern = { '*' },
+    group = augroup,
+    callback = function(_)
+      -- 切换至美式键盘
+      vim.system { imselect, '1033' }
+    end,
+  })
+  create_autocmd({ 'FocusLost' }, {
+    pattern = { '*' },
+    group = augroup,
+    callback = function(_)
+      -- 切换至微软拼音
+      vim.system { imselect, '2052' }
+    end,
+  })
+end
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -893,31 +917,6 @@ require('lazy').setup({
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
-  },
-  { -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
 
   {

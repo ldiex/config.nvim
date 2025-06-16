@@ -178,6 +178,34 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
+local obsidian_config = {
+  'epwalsh/obsidian.nvim',
+  version = '*', -- recommended, use latest release instead of latest commit
+  lazy = true,
+  ft = 'markdown',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+  },
+  opts = {
+    -- This section will be conditional
+    workspaces = {},
+    ui = {
+      enable = false,
+    },
+  },
+}
+
+-- Check if the operating system is Windows
+if vim.uv.os_uname().sysname == 'Windows_NT' then
+  -- Add the 'personal' workspace only if on Windows
+  obsidian_config.opts.workspaces = {
+    {
+      name = 'personal',
+      path = 'C:\\Users\\diex\\Documents\\Obsidian',
+    },
+  }
+end
+
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
@@ -907,7 +935,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -979,6 +1007,18 @@ require('lazy').setup({
     },
   },
 
+  {
+    'OXY2DEV/markview.nvim',
+    lazy = false,
+
+    -- For blink.cmp's completion
+    -- source
+    -- dependencies = {
+    --     "saghen/blink.cmp"
+    -- },
+  },
+
+  -- obsidian_config,
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -1026,6 +1066,3 @@ require('lazy').setup({
     },
   },
 })
-
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et

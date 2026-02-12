@@ -1,5 +1,7 @@
 set relativenumber
 set tabstop=4
+set shiftwidth=4
+set expandtab
 
 let mapleader = "\<Space>"
 nnoremap <leader>mm :call MdToLatex()<CR>

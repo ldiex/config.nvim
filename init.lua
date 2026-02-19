@@ -4,30 +4,6 @@ else
   vim.cmd 'source $HOME/.config/nvim/.vimrc'
 end
 
-if vim.uv.os_uname().sysname == 'Windows_NT' then
-  vim.opt.shell = 'cmd.exe'
-  local augroup = vim.api.nvim_create_augroup('diex', { clear = true })
-  local create_autocmd = vim.api.nvim_create_autocmd
-  local imselect = 'C:\\Users\\diex\\Apps\\im-select.exe'
-
-  create_autocmd({ 'InsertLeave', 'FocusGained', 'CmdlineLeave', 'VimEnter' }, {
-    pattern = { '*' },
-    group = augroup,
-    callback = function(_)
-      -- 切换至美式键盘
-      vim.system { imselect, '1033' }
-    end,
-  })
-  create_autocmd({ 'FocusLost' }, {
-    pattern = { '*' },
-    group = augroup,
-    callback = function(_)
-      -- 切换至微软拼音
-      vim.system { imselect, '2052' }
-    end,
-  })
-end
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -968,7 +944,7 @@ require('lazy').setup({
     opts = { labeled_modes = 'nx' },
   },
   {
-    'ggandor/leap.nvim',
+    url = 'https://codeberg.org/andyg/leap.nvim',
     enabled = true,
     keys = {
       { 's', mode = { 'n', 'x', 'o' }, desc = 'Leap Forward to' },

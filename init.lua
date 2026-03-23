@@ -52,9 +52,9 @@ vim.opt.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
+
+vim.opt.clipboard = "unnamedplus"
+vim.g.clipboard = "osc52"
 
 -- Enable break indent
 vim.opt.breakindent = true
@@ -237,7 +237,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -280,7 +280,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -320,7 +320,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -415,7 +415,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',    opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
@@ -466,6 +466,8 @@ require('lazy').setup({
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
           map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+
+          map('gd', vim.lsp.buf.definition, '[G]oto [d]efinition')
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
@@ -526,7 +528,8 @@ require('lazy').setup({
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --  See `:help lsp-config` for information about keys and how to configure
       local servers = {
-        clangd = {},
+        -- clangd = {},
+        ty = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -548,7 +551,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'lua-language-server', -- Lua Language server
-        'stylua', -- Used to format Lua code
+        'ty',                  -- Python LSP
         -- You can add other tools here that you want Mason to install
       })
 
@@ -742,6 +745,7 @@ require('lazy').setup({
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
 
       vim.cmd.colorscheme 'gruvbox'
+      vim.o.background = "light"
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -784,11 +788,11 @@ require('lazy').setup({
         },
         -- you can enable a preset for easier configuration
         presets = {
-          bottom_search = true, -- use a classic bottom cmdline for search
-          command_palette = true, -- position the cmdline and popupmenu together
+          bottom_search = true,         -- use a classic bottom cmdline for search
+          command_palette = true,       -- position the cmdline and popupmenu together
           long_message_to_split = true, -- long messages will be sent to a split
-          inc_rename = false, -- enables an input dialog for inc-rename.nvim
-          lsp_doc_border = false, -- add a border to hover docs and signature help
+          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = false,       -- add a border to hover docs and signature help
         },
       }
     end,
@@ -874,11 +878,11 @@ require('lazy').setup({
     opts = { labeled_modes = 'nx' },
   },
   {
-    url = 'https://codeberg.org/andyg/leap.nvim',
+    url = 'https://git.disroot.org/andyg/leap.nvim',
     enabled = true,
     keys = {
-      { 's', mode = { 'n', 'x', 'o' }, desc = 'Leap Forward to' },
-      { 'S', mode = { 'n', 'x', 'o' }, desc = 'Leap Backward to' },
+      { 's',  mode = { 'n', 'x', 'o' }, desc = 'Leap Forward to' },
+      { 'S',  mode = { 'n', 'x', 'o' }, desc = 'Leap Backward to' },
       { 'gs', mode = { 'n', 'x', 'o' }, desc = 'Leap from Windows' },
     },
     config = function(_, opts)
@@ -898,12 +902,12 @@ require('lazy').setup({
     optional = true,
     opts = {
       mappings = {
-        add = 'gza', -- Add surrounding in Normal and Visual modes
-        delete = 'gzd', -- Delete surrounding
-        find = 'gzf', -- Find surrounding (to the right)
-        find_left = 'gzF', -- Find surrounding (to the left)
-        highlight = 'gzh', -- Highlight surrounding
-        replace = 'gzr', -- Replace surrounding
+        add = 'gza',            -- Add surrounding in Normal and Visual modes
+        delete = 'gzd',         -- Delete surrounding
+        find = 'gzf',           -- Find surrounding (to the right)
+        find_left = 'gzF',      -- Find surrounding (to the left)
+        highlight = 'gzh',      -- Highlight surrounding
+        replace = 'gzr',        -- Replace surrounding
         update_n_lines = 'gzn', -- Update `n_lines`
       },
     },
